@@ -3,7 +3,7 @@ import org.sql2o.*;
 import java.util.List;
 import java.sql.Timestamp;
 
-public class WaterMonster extends Monster {
+public class WaterMonster extends Monster implements DatabaseManagement {
   private int waterLevel;
   public Timestamp lastWater;
   public static final int MAX_WATER_LEVEL = 8;
@@ -81,6 +81,14 @@ public class WaterMonster extends Monster {
         .executeAndFetchFirst(WaterMonster.class);
       return monster;
     }
+  }
+
+  @Test
+  public void delete_deletesWaterMonster_true() {
+    WaterMonster testWaterMonster = new WaterMonster("Bubbles", 1);
+    testWaterMonster.save();
+    testWaterMonster.delete();
+    assertEquals(null, WaterMonster.find(testWaterMonster.getId()));
   }
 
 }
